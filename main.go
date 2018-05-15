@@ -12,23 +12,23 @@ import (
 )
 
 var (
-    useRedis bool
+    noRedis bool
     get func(string) []byte
 )
 
 func init() {
-    useRedis = os.Getenv("DO_NOT_USE_REDIS") == "true"
-    if useRedis {
+    noRedis = os.Getenv("DO_NOT_USE_REDIS") == "true"
+    if noRedis {
+        get = httpnet.Get
+    } else {
         get = httpnet.GetWithCache
         red.Init()
-    } else {
-        get = httpnet.Get
     }
 }
 
 func main() {
     {
-        if (useRedis) {
+        if noRedis {
             go red.Set()
             defer red.Client.Close()
         }
