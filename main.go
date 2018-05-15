@@ -6,6 +6,7 @@ import (
     "./pkg/util"
     "./pkg/httpnet"
     "./pkg/htmlparse"
+    "./pkg/article"
     "os"
     "github.com/PuerkitoBio/goquery"
 )
@@ -39,14 +40,7 @@ func main() {
         url := util.Page(i)
         htmlBody := get(url)
 
-        htmlparse.FlatMap(htmlBody, "h2.post-title > a[href]", func(node *goquery.Selection) {
-            href, err := node.Attr("href")
-            if !err {
-                panic(fmt.Sprintf("href doesn't exist - for %s", url))
-            }
-
-            path := util.StripHost(href)
-            url := util.Path(path)
+        article.Link(htmlBody, func(url string) {
             htmlBody := get(url)
             title := htmlparse.Text(htmlBody, "h1.post-title")
 
