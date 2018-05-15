@@ -5,7 +5,7 @@ import (
     "gopkg.in/kothar/brotli-go.v0/enc"
 )
 
-func Decomp(str string) string {
+func Decomp(str string) []byte {
     input := []byte(str)
 
     decompressed, err := dec.DecompressBuffer(input, make([]byte, 0))
@@ -13,7 +13,7 @@ func Decomp(str string) string {
         panic(err)
     }
 
-    return string(decompressed)
+    return decompressed
 }
 
 func Comp(input []byte) []byte {

@@ -7,29 +7,43 @@ import (
     "./pkg/httpnet"
     "github.com/andybalholm/cascadia"
     "golang.org/x/net/html"
-    "strings"
+    "os"
+    "bytes"
+)
+
+var (
+    useRedis bool
+    get func(string) []byte
 )
 
 func init() {
-    red.Init()
+    useRedis = os.Getenv("DO_NOT_USE_REDIS") == "true"
+    if useRedis {
+        get = httpnet.GetWithCache
+        red.Init()
+    } else {
+        get = httpnet.Get
+    }
 }
 
 func main() {
     {
-        go red.Set()
-        defer red.Client.Close()
+        if (useRedis) {
+            go red.Set()
+            defer red.Client.Close()
+        }
     }
 
     util.PFor(func(i util.IntType) {
         url := util.Page(i)
 
-        htmlBody := httpnet.GetWithCache(url)
+        htmlBody := get(url)
         art, err := cascadia.Compile("h2.post-title > a[href]")
         if err != nil {
             panic(err)
         }
 
-        tree, err := html.Parse(strings.NewReader(htmlBody))
+        tree, err := html.Parse(bytes.NewReader(htmlBody))
         if err != nil {
             panic(err)
         }

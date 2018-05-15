@@ -21,14 +21,14 @@ func Get(url string) []byte {
     return body
 }
 
-func GetWithCache(url string) string {
+func GetWithCache(url string) []byte {
     cache := red.Cache
     if val, ok := cache[url]; ok {
         htmlBody := brotli.Decomp(val)
-        return htmlBody
+        return []byte(htmlBody)
     }
 
     body := Get(url)
     red.InRedis <- red.KeyVal{url, brotli.Comp(body)}
-    return string(body)
+    return body
 }
