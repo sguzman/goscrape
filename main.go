@@ -5,10 +5,8 @@ import (
     "./pkg/red"
     "./pkg/util"
     "./pkg/httpnet"
-    "./pkg/htmlparse"
     "./pkg/article"
     "os"
-    "github.com/PuerkitoBio/goquery"
 )
 
 var (
@@ -42,9 +40,9 @@ func main() {
 
         article.Link(htmlBody, func(url string) {
             htmlBody := get(url)
-            title := htmlparse.Text(htmlBody, "h1.post-title")
+            book := article.Book(htmlBody)
 
-            fmt.Println(title)
+            fmt.Println(book)
         })
     })
 }
