@@ -19,8 +19,10 @@ var (
 func init() {
     noRedis = os.Getenv("DO_NOT_USE_REDIS") == "true"
     if noRedis {
+        fmt.Println("Not using redis")
         get = httpnet.Get
     } else {
+        fmt.Println("Using redis")
         get = httpnet.GetWithCache
         red.Init()
     }
