@@ -7,7 +7,7 @@ import (
 
 const (
     Limit = IntType(1290)
-    Cores = IntType(4)
+    Cores = IntType(8)
 )
 
 type IntType uint64
