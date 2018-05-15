@@ -41,7 +41,10 @@ func main() {
 
         htmlparse.FlatMap(htmlBody, "h2.post-title > a[href]", func(node *html.Node) {
             href := node.Attr[0].Val
-            fmt.Println(href)
+            path := util.StripHost(href)
+            url := util.Path(path)
+
+            htmlBody := get(url)
         })
     })
 }
