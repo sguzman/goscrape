@@ -42,7 +42,7 @@ func main() {
             htmlBody := get(url)
             book := article.Book(htmlBody)
 
-            fmt.Println(book)
+            fmt.Println(book.Str())
         })
     })
 }
