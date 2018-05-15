@@ -41,6 +41,10 @@ func img(doc docType) string {
     return src
 }
 
+func desc(doc docType) string {
+    return doc.Find("div.entry-inner").Text()
+}
+
 func Book(htmlBody []byte) BookType {
     doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlBody))
     if err != nil {
@@ -49,7 +53,7 @@ func Book(htmlBody []byte) BookType {
 
     title := title(doc)
     img := img(doc)
-    desc := ""
+    desc := desc(doc)
     pub := optional.String{}
     pubDate := optional.String{}
     isbn10 := optional.String{}
